@@ -204,7 +204,14 @@
         <canvas id="pongCanvas" width="600" height="400" style="border:2px solid #40e0d0; border-radius: 8px; margin-top: 2rem;"></canvas>
         <div style="text-align: center; margin-top: 1rem; color: #40e0d0;">
             <p>점수: <span id="playerScore">0</span> - <span id="aiScore">0</span></p>
-            <p>스페이스바로 시작/종료 | 위/아래 방향키로 이동</p>
+            <p class="desktop-controls">스페이스바로 시작/종료 | 위/아래 방향키로 이동</p>
+            <div class="mobile-controls" style="display: none; margin-top: 1rem;">
+                <button id="startBtn" style="background: #40e0d0; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin: 5px;">시작/종료</button>
+                <div style="margin-top: 10px;">
+                    <button id="upBtn" style="background: #40e0d0; color: white; border: none; padding: 15px 25px; border-radius: 5px; margin: 5px;">↑</button>
+                    <button id="downBtn" style="background: #40e0d0; color: white; border: none; padding: 15px 25px; border-radius: 5px; margin: 5px;">↓</button>
+                </div>
+            </div>
         </div>
     </div>
 
