@@ -200,10 +200,12 @@
 
     <p class="remaining-time" id="full-time"></p>
     
-    <canvas id="pongCanvas" width="600" height="400" style="border:2px solid #40e0d0; border-radius: 8px; margin-top: 2rem;"></canvas>
-    <div style="text-align: center; margin-top: 1rem; color: #40e0d0;">
-        <p>점수: <span id="playerScore">0</span> - <span id="aiScore">0</span></p>
-        <p>스페이스바로 시작 | 위/아래 방향키로 이동</p>
+    <div id="gameContainer" style="scroll-margin-top: 2rem;">
+        <canvas id="pongCanvas" width="600" height="400" style="border:2px solid #40e0d0; border-radius: 8px; margin-top: 2rem;"></canvas>
+        <div style="text-align: center; margin-top: 1rem; color: #40e0d0;">
+            <p>점수: <span id="playerScore">0</span> - <span id="aiScore">0</span></p>
+            <p>스페이스바로 시작/종료 | 위/아래 방향키로 이동</p>
+        </div>
     </div>
 
     <script>
@@ -287,13 +289,49 @@
 
         // Event listeners
         document.addEventListener('keydown', (e) => {
+            // Prevent default behavior for arrow keys
+            if(['ArrowUp', 'ArrowDown', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+            
             if (e.key === 'ArrowUp') keys.up = true;
             if (e.key === 'ArrowDown') keys.down = true;
-            if (e.code === 'Space' && !gameStarted) {
-                gameStarted = true;
-                requestAnimationFrame(gameLoop);
+            if (e.code === 'Space') {
+                if (!gameStarted) {
+                    startGame();
+                } else {
+                    endGame();
+                }
             }
         });
+
+        // Prevent scrolling when using arrow keys
+        window.addEventListener('keydown', (e) => {
+            if(['ArrowUp', 'ArrowDown', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+        }, false);
+
+        function startGame() {
+            gameStarted = true;
+            player.score = 0;
+            ai.score = 0;
+            document.getElementById('playerScore').textContent = '0';
+            document.getElementById('aiScore').textContent = '0';
+            resetBall();
+            // Scroll to game
+            document.getElementById('gameContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            gameStarted = false;
+            // Reset positions
+            player.y = canvas.height / 2 - paddleHeight / 2;
+            ai.y = canvas.height / 2 - paddleHeight / 2;
+            resetBall();
+            draw(); // Final draw to show reset positions
+        }
 
         document.addEventListener('keyup', (e) => {
             if (e.key === 'ArrowUp') keys.up = false;
